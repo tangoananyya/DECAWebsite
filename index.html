@@ -1,0 +1,1002 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Turner Fenton DECA</title>
+<link rel="stylesheet" href="style.css"/>
+<style>
+/* ── HERO ──────────────────────────────────────────── */
+.hero {
+  position: relative;
+  height: 100vh;
+  min-height: 700px;
+  display: flex;
+  align-items: flex-end;
+  overflow: hidden;
+  background: var(--base);
+}
+
+#hero-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+.hero-bg-img {
+  position: absolute;
+  inset: 0;
+  background-image: url('https://www.tfssdeca.com/images/homepage_banner.png');
+  background-size: cover;
+  background-position: center 35%;
+  opacity: 0.06;
+  z-index: 0;
+}
+
+/* Vignette */
+.hero-vignette {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 50%, transparent 30%, rgba(7,8,9,0.7) 100%),
+    linear-gradient(to top, var(--base) 0%, transparent 40%);
+  z-index: 2;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 3;
+  padding: 0 5% 88px;
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+.hero-ticker {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.14em;
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  margin-bottom: 32px;
+  overflow: hidden;
+}
+
+.hero-ticker-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  opacity: 0;
+  animation: tickerIn 0.6s ease forwards;
+}
+
+.hero-ticker-item:nth-child(1) { animation-delay: 0.5s; }
+.hero-ticker-item:nth-child(2) { animation-delay: 0.7s; }
+.hero-ticker-item:nth-child(3) { animation-delay: 0.9s; }
+
+@keyframes tickerIn {
+  from { opacity: 0; transform: translateX(-10px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+.ticker-dot {
+  width: 4px; height: 4px;
+  border-radius: 50%;
+  background: var(--gold);
+  animation: blink 2s ease-in-out infinite;
+}
+
+@keyframes blink {
+  0%,100% { opacity: 1; }
+  50% { opacity: 0.2; }
+}
+
+.hero-eyeline {
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 20px;
+  opacity: 0;
+  animation: fadeUp 0.7s ease 0.3s forwards;
+}
+
+.hero h1 {
+  font-family: var(--serif);
+  font-weight: 900;
+  font-size: clamp(3.6rem, 9vw, 8rem);
+  line-height: 1.0;
+  color: var(--white);
+  margin-bottom: 28px;
+  overflow: hidden;
+}
+
+.hero-line {
+  display: block;
+  opacity: 0;
+  transform: translateY(100%);
+  animation: slideUp 0.8s var(--ease) forwards;
+}
+
+.hero-line.l1 { animation-delay: 0.4s; }
+.hero-line.l2 { animation-delay: 0.55s; font-style: italic; color: var(--gold); }
+.hero-line.l3 { animation-delay: 0.7s; }
+
+@keyframes slideUp {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeUp {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.hero-sub {
+  font-size: 1rem;
+  color: var(--muted);
+  max-width: 520px;
+  margin-bottom: 40px;
+  line-height: 1.75;
+  opacity: 0;
+  animation: fadeUp 0.8s ease 0.85s forwards;
+}
+
+.hero-cta {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  opacity: 0;
+  animation: fadeUp 0.8s ease 1s forwards;
+}
+
+/* Scroll indicator */
+.hero-scroll-indicator {
+  position: absolute;
+  right: 5%;
+  bottom: 40px;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  color: var(--muted2);
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  writing-mode: vertical-rl;
+}
+
+.scroll-line-v {
+  width: 1px;
+  height: 48px;
+  background: linear-gradient(to bottom, var(--muted2), transparent);
+  animation: scrollPulse 2s ease-in-out infinite;
+}
+
+@keyframes scrollPulse {
+  0%,100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+/* ── TICKER BAND ────────────────────────────────────── */
+.ticker-band {
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: 0;
+  overflow: hidden;
+  height: 42px;
+  display: flex;
+  align-items: center;
+}
+
+.ticker-track {
+  display: flex;
+  gap: 0;
+  white-space: nowrap;
+  animation: tickerScroll 24s linear infinite;
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+}
+
+.ticker-track:hover { animation-play-state: paused; }
+
+.ticker-sep {
+  display: inline-block;
+  margin: 0 28px;
+  color: var(--border2);
+}
+
+.ticker-hi { color: var(--gold); }
+
+@keyframes tickerScroll {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* ── STATS ──────────────────────────────────────────── */
+.stats-section {
+  background: var(--base);
+  padding: 96px 5%;
+  border-bottom: 1px solid var(--border);
+}
+
+.stats-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
+}
+
+.stats-text .section-hed { margin-bottom: 20px; }
+
+.stats-text p {
+  color: var(--muted);
+  font-size: 0.95rem;
+  max-width: 440px;
+  line-height: 1.75;
+  margin-bottom: 32px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px;
+  background: var(--border);
+}
+
+.stat-block {
+  background: var(--card);
+  padding: 36px 28px;
+  position: relative;
+  overflow: hidden;
+  transition: background var(--t);
+}
+
+.stat-block:hover { background: var(--card2); }
+
+.stat-block::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: var(--gold);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.5s var(--ease);
+}
+
+.stat-block:hover::before { transform: scaleX(1); }
+
+.stat-num {
+  font-family: var(--serif);
+  font-weight: 700;
+  font-size: 3.2rem;
+  color: var(--white);
+  line-height: 1;
+  display: block;
+}
+
+.stat-label {
+  font-family: var(--mono);
+  font-size: 0.64rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-top: 8px;
+  display: block;
+}
+
+/* ── ABOUT ──────────────────────────────────────────── */
+.about-section {
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: 96px 5%;
+}
+
+.about-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
+}
+
+.about-images {
+  position: relative;
+  height: 520px;
+}
+
+.about-img-main {
+  position: absolute;
+  top: 0; left: 0;
+  width: 75%;
+  height: 76%;
+  object-fit: cover;
+  border: 1px solid var(--border2);
+  border-radius: 2px;
+  filter: grayscale(30%) brightness(0.85);
+  transition: filter 0.4s ease;
+}
+
+.about-img-main:hover { filter: grayscale(0%) brightness(1); }
+
+.about-img-accent {
+  position: absolute;
+  bottom: 0; right: 0;
+  width: 55%;
+  height: 52%;
+  object-fit: cover;
+  object-position: top;
+  border: 2px solid var(--base);
+  outline: 1px solid var(--border2);
+  border-radius: 2px;
+  filter: grayscale(30%) brightness(0.85);
+  transition: filter 0.4s ease;
+}
+
+.about-img-accent:hover { filter: grayscale(0%) brightness(1); }
+
+.about-gold-stripe {
+  position: absolute;
+  left: -20px;
+  top: 15%;
+  width: 2px;
+  height: 100px;
+  background: linear-gradient(to bottom, var(--gold), transparent);
+}
+
+.about-tag {
+  position: absolute;
+  bottom: 80px; left: -10px;
+  background: var(--card);
+  border: 1px solid var(--border2);
+  border-radius: 2px;
+  padding: 10px 16px;
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  color: var(--gold);
+  white-space: nowrap;
+}
+
+.about-text .section-hed { margin-bottom: 24px; }
+
+.about-text p {
+  color: var(--muted);
+  font-size: 0.94rem;
+  margin-bottom: 14px;
+  line-height: 1.8;
+}
+
+.about-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 28px;
+  margin-bottom: 36px;
+}
+
+.pill {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  border: 1px solid var(--border);
+  padding: 5px 14px;
+  border-radius: 2px;
+  transition: border-color var(--t), color var(--t);
+}
+.pill:hover { border-color: var(--border2); color: var(--gold); }
+
+/* ── GALLERY ────────────────────────────────────────── */
+.gallery-section {
+  background: var(--base);
+  padding: 80px 5%;
+  border-bottom: 1px solid var(--border);
+}
+
+.gallery-header { max-width: 1280px; margin: 0 auto 40px; }
+
+.gallery-grid {
+  max-width: 1280px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 6px;
+}
+
+.gallery-grid img {
+  width: 100%;
+  aspect-ratio: 4/3;
+  object-fit: cover;
+  display: block;
+  border: 1px solid var(--border);
+  filter: grayscale(50%) brightness(0.7);
+  transition: filter 0.4s ease, transform 0.4s ease, border-color 0.3s ease;
+}
+
+.gallery-grid img:first-child {
+  grid-column: 1 / 3;
+  aspect-ratio: 16/9;
+}
+
+.gallery-grid img:hover {
+  filter: grayscale(0%) brightness(1);
+  transform: scale(1.02);
+  border-color: var(--border2);
+  z-index: 1;
+  position: relative;
+}
+
+/* ── WHY DECA ────────────────────────────────────────── */
+.why-section {
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: 96px 5%;
+}
+
+.why-inner { max-width: 1280px; margin: 0 auto; }
+
+.why-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 56px;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.why-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); }
+
+.why-card {
+  background: var(--card);
+  padding: 44px 36px;
+  transition: background var(--t);
+  position: relative;
+  overflow: hidden;
+  cursor: default;
+}
+
+.why-card::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  transform: scaleX(0);
+  transition: transform 0.5s var(--ease);
+}
+
+.why-card:hover { background: var(--card2); }
+.why-card:hover::after { transform: scaleX(1); }
+
+.why-num {
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.18em;
+  color: var(--muted2);
+  margin-bottom: 20px;
+}
+
+.why-card h3 {
+  font-family: var(--serif);
+  font-weight: 700;
+  font-size: 1.6rem;
+  color: var(--white);
+  margin-bottom: 14px;
+}
+
+.why-card p { color: var(--muted); font-size: 0.9rem; line-height: 1.75; }
+
+/* ── CTA ────────────────────────────────────────────── */
+.cta-section {
+  background: var(--base);
+  padding: 96px 5%;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.cta-section::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 70% 70% at 50% 50%, rgba(201,168,76,0.04) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.cta-section h2 {
+  font-family: var(--serif);
+  font-weight: 900;
+  font-size: clamp(2.4rem, 5vw, 4.5rem);
+  color: var(--white);
+  margin-bottom: 16px;
+  position: relative;
+}
+
+.cta-section p {
+  color: var(--muted);
+  max-width: 460px;
+  margin: 0 auto 40px;
+  font-size: 0.95rem;
+  position: relative;
+}
+
+.cta-btns { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; position: relative; }
+
+@media (max-width: 960px) {
+  .stats-inner { grid-template-columns: 1fr; }
+  .about-inner { grid-template-columns: 1fr; gap: 48px; }
+  .about-images { height: 320px; }
+  .why-grid { grid-template-columns: 1fr; }
+  .gallery-grid { grid-template-columns: repeat(3, 1fr); }
+  .gallery-grid img:first-child { grid-column: 1 / 3; }
+}
+
+@media (max-width: 600px) {
+  .gallery-grid { grid-template-columns: 1fr 1fr; }
+  .stats-grid { grid-template-columns: 1fr 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- TRANSITION -->
+<div id="pt" class="in">
+  <div class="pt-slab"></div>
+  <div class="pt-slab"></div>
+  <div class="pt-slab"></div>
+  <div id="pt-logo"><svg viewBox="0 0 680 680" xmlns="http://www.w3.org/2000/svg" style="height:88px;width:auto;display:block;"><rect width="680" height="680" fill="#C9A84C"/><g transform="translate(340,355) rotate(-40)"><polygon points="-10,195 -38,250 -5,228 -25,285 10,240 26,295 18,240 48,260 16,205" fill="#070809"/><polygon points="-28,170 28,170 20,195 -20,195" fill="#0d1117" stroke="#070809" stroke-width="1"/><polygon points="-58,35 -18,-125 0,-150 0,170 -58,170" fill="#0d1117"/><polygon points="-58,35 -18,-125 0,-150 0,-28 -30,35" fill="#111820"/><polygon points="58,35 18,-125 0,-150 0,170 58,170" fill="#111820"/><polygon points="-4,-150 4,-150 4,170 -4,170" fill="#070809" opacity="0.4"/><line x1="-58" y1="35" x2="-18" y2="-125" stroke="#070809" stroke-width="1.2"/><line x1="58" y1="35" x2="18" y2="-125" stroke="#070809" stroke-width="1.2"/><polygon points="0,-250 -18,-150 0,-150 18,-150" fill="#0d1117"/><line x1="0" y1="-250" x2="-18" y2="-150" stroke="#070809" stroke-width="1.4"/><line x1="0" y1="-250" x2="18" y2="-150" stroke="#070809" stroke-width="1.4"/><circle cx="0" cy="-250" r="4" fill="#070809"/><ellipse cx="0" cy="-52" rx="38" ry="44" fill="#C9A84C" stroke="#070809" stroke-width="1.4"/><ellipse cx="0" cy="-84" rx="20" ry="5" fill="#070809" opacity="0.8"/><polygon points="0,-108 -15,-84 15,-84" fill="#0d1117"/><ellipse cx="0" cy="-60" rx="16" ry="17" fill="#0d1117"/><polygon points="-58,35 -110,120 -110,170 -58,170" fill="#0d1117"/><line x1="-58" y1="35" x2="-110" y2="120" stroke="#070809" stroke-width="1.1"/><polygon points="58,35 110,120 110,170 58,170" fill="#111820"/><line x1="58" y1="35" x2="110" y2="120" stroke="#070809" stroke-width="1.1"/></g><text x="340" y="620" text-anchor="middle" font-family="Playfair Display,Georgia,serif" font-size="72" font-weight="900" fill="#070809" letter-spacing="10">DECA</text></svg></div>
+</div>
+
+<!-- NAV -->
+<nav class="nav" id="mainNav">
+  <a href="index.html" style="display:flex;align-items:center;flex-shrink:0;overflow:visible;text-decoration:none;"><span style="font-family:'Playfair Display',Georgia,serif;font-weight:900;font-size:1.6rem;font-style:italic;color:#E8C96A;letter-spacing:0.04em;line-height:1;">DECA</span></a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="index.html" class="active">Home</a></li>
+    <li><a href="sponsors.html">Sponsors</a></li>
+    <li><a href="executive.html">Executive</a></li>
+    <li><a href="news.html">News & Updates</a></li>
+    <li><a href="dashboard.html">Member Dashboard</a></li>
+  </ul>
+  <button class="nav-burger" id="burger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg-img"></div>
+  <canvas id="hero-canvas"></canvas>
+  <div class="hero-vignette"></div>
+  <div class="hero-content">
+    <div class="hero-eyeline">Est. 2013 — Turner Fenton Secondary School</div>
+    <div class="hero-ticker">
+      <span class="hero-ticker-item"><span class="ticker-dot"></span> Ontario's Top DECA Chapter</span>
+      <span class="hero-ticker-item"><span class="ticker-dot"></span> 1,500+ Awards</span>
+      <span class="hero-ticker-item"><span class="ticker-dot"></span> 100+ ICDC Qualifiers</span>
+    </div>
+    <h1>
+      <span class="hero-line l1">Compete.</span>
+      <span class="hero-line l2">Lead.</span>
+      <span class="hero-line l3">Excel.</span>
+    </h1>
+    <p class="hero-sub">One of Ontario's largest and most decorated DECA chapters. 400+ applicants every year. Multiple world champions. One standard of excellence.</p>
+    <div class="hero-cta">
+      <a href="news.html" class="btn btn-gold">Apply to Join ↗</a>
+      <a href="executive.html" class="btn btn-outline">Meet the Exec</a>
+    </div>
+  </div>
+  <div class="hero-scroll-indicator">
+    <div class="scroll-line-v"></div>
+    Scroll
+  </div>
+</section>
+
+<!-- TICKER BAND -->
+<div class="ticker-band">
+  <div class="ticker-track" id="tickerTrack">
+    <span><span class="ticker-hi">DECA</span> Regional Champion<span class="ticker-sep">◆</span></span>
+    <span><span class="ticker-hi">1,500+</span> Total Awards<span class="ticker-sep">◆</span></span>
+    <span>Provincial Medalists<span class="ticker-sep">◆</span></span>
+    <span><span class="ticker-hi">ICDC 2026</span> Atlanta, GA<span class="ticker-sep">◆</span></span>
+    <span>World Champions<span class="ticker-sep">◆</span></span>
+    <span><span class="ticker-hi">400+</span> Annual Applicants<span class="ticker-sep">◆</span></span>
+    <span>Brampton, Ontario<span class="ticker-sep">◆</span></span>
+    <span><span class="ticker-hi">1,200+</span> Instagram Followers<span class="ticker-sep">◆</span></span>
+    <!-- duplicate for seamless loop -->
+    <span><span class="ticker-hi">DECA</span> Regional Champion<span class="ticker-sep">◆</span></span>
+    <span><span class="ticker-hi">1,500+</span> Total Awards<span class="ticker-sep">◆</span></span>
+    <span>Provincial Medalists<span class="ticker-sep">◆</span></span>
+    <span><span class="ticker-hi">ICDC 2026</span> Atlanta, GA<span class="ticker-sep">◆</span></span>
+    <span>World Champions<span class="ticker-sep">◆</span></span>
+    <span><span class="ticker-hi">400+</span> Annual Applicants<span class="ticker-sep">◆</span></span>
+    <span>Brampton, Ontario<span class="ticker-sep">◆</span></span>
+    <span><span class="ticker-hi">1,200+</span> Instagram Followers<span class="ticker-sep">◆</span></span>
+  </div>
+</div>
+
+<!-- STATS -->
+<section class="stats-section">
+  <div class="stats-inner">
+    <div class="stats-text reveal">
+      <div class="mono-label">By the Numbers</div>
+      <h2 class="section-hed">A Decade of<br><em>Excellence</em></h2>
+      <p>Since 2013, Turner Fenton DECA has set a standard that no other high school chapter in Ontario has matched. Every year we raise the bar.</p>
+      <a href="news.html" class="btn btn-outline">See How to Join →</a>
+    </div>
+    <div class="stats-grid reveal reveal-delay-2">
+      <div class="stat-block">
+        <span class="stat-num" data-target="1500">0</span>
+        <span class="stat-label">+ Awards Won</span>
+      </div>
+      <div class="stat-block">
+        <span class="stat-num" data-target="100">0</span>
+        <span class="stat-label">+ ICDC Qualifiers</span>
+      </div>
+      <div class="stat-block">
+        <span class="stat-num" data-target="400">0</span>
+        <span class="stat-label">+ Annual Applicants</span>
+      </div>
+      <div class="stat-block">
+        <span class="stat-num" data-target="1200">0</span>
+        <span class="stat-label">+ Instagram Followers</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="about-section">
+  <div class="about-inner">
+    <div class="about-images reveal">
+      <img class="about-img-main" src="https://www.tfssdeca.com/images/KEV_2452.jpg" alt="DECA members"/>
+      <img class="about-img-accent" src="https://www.tfssdeca.com/images/IMG_0526.CR2.jpg" alt="Competition"/>
+      <div class="about-gold-stripe"></div>
+      <div class="about-tag">Founded 2013 · Brampton, ON</div>
+    </div>
+    <div class="about-text reveal reveal-delay-2">
+      <div class="mono-label">About the Chapter</div>
+      <h2 class="section-hed">Built to<br><em>Win</em></h2>
+      <p>Turner Fenton DECA is one of the largest, most accomplished chapters within Ontario DECA. Each year, over 400 students compete for roughly 100 spots in the chapter — and those who make it represent our school in business management, finance, marketing, entrepreneurship, and hospitality.</p>
+      <p>Since 2017, we've earned over 1,500 awards, qualified 100+ students for ICDC, and produced multiple world champions. In 2025 alone: 40 provincial awards and 8 ICDC qualifiers.</p>
+      <div class="about-pills">
+        <span class="pill">Marketing</span>
+        <span class="pill">Finance</span>
+        <span class="pill">Entrepreneurship</span>
+        <span class="pill">Hospitality & Tourism</span>
+        <span class="pill">Business Mgmt</span>
+      </div>
+      <a href="news.html" class="btn btn-gold">Apply Now ↗</a>
+    </div>
+  </div>
+</section>
+
+
+
+
+<!-- GALLERY -->
+<section style="background:var(--base);padding:88px 5%;border-bottom:1px solid var(--border);">
+  <div style="max-width:1280px;margin:0 auto;">
+    <div class="reveal">
+      <div class="mono-label">Chapter Moments</div>
+      <h2 class="section-hed" style="margin-bottom:40px;">Life at TFSS DECA</h2>
+    </div>
+
+    <div class="reveal reveal-delay-1" style="position:relative;overflow:hidden;border:1px solid var(--border);border-radius:4px;">
+
+      <div id="sliderTrack" style="display:flex;transition:transform 0.75s cubic-bezier(0.76,0,0.24,1);will-change:transform;">
+        <div style="min-width:100%;flex-shrink:0;"><img src="https://www.tfssdeca.com/images/3C7A8628.jpg" alt="Chapter group photo" style="width:100%;height:500px;object-fit:cover;display:block;filter:brightness(0.82) saturate(0.88);"/></div>
+        <div style="min-width:100%;flex-shrink:0;"><img src="https://www.tfssdeca.com/images/C019A59F-F2A8-40CD-9CA6-513918C64CDD_VSCO.jpg" alt="DECA members" style="width:100%;height:500px;object-fit:cover;display:block;filter:brightness(0.82) saturate(0.88);"/></div>
+        <div style="min-width:100%;flex-shrink:0;"><img src="https://www.tfssdeca.com/images/IMG_0594.CR2.jpg" alt="Competition day" style="width:100%;height:500px;object-fit:cover;display:block;filter:brightness(0.82) saturate(0.88);"/></div>
+        <div style="min-width:100%;flex-shrink:0;"><img src="https://www.tfssdeca.com/images/KEV_4854.jpg" alt="Award ceremony" style="width:100%;height:500px;object-fit:cover;display:block;filter:brightness(0.82) saturate(0.88);"/></div>
+        <div style="min-width:100%;flex-shrink:0;"><img src="https://www.tfssdeca.com/images/GLASS.jpg" alt="Chapter photo" style="width:100%;height:500px;object-fit:cover;display:block;filter:brightness(0.82) saturate(0.88);"/></div>
+        <div style="min-width:100%;flex-shrink:0;"><img src="https://www.tfssdeca.com/images/KEV_2452.jpg" alt="Members" style="width:100%;height:500px;object-fit:cover;display:block;filter:brightness(0.82) saturate(0.88);"/></div>
+      </div>
+
+      <!-- Prev / Next -->
+      <button id="sPrev" aria-label="Previous" style="position:absolute;top:50%;left:20px;transform:translateY(-50%);background:rgba(7,8,9,0.78);border:1px solid rgba(201,168,76,0.35);color:#C9A84C;width:48px;height:48px;border-radius:2px;font-size:1.1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(8px);transition:background 0.2s,border-color 0.2s;">&#8592;</button>
+      <button id="sNext" aria-label="Next" style="position:absolute;top:50%;right:20px;transform:translateY(-50%);background:rgba(7,8,9,0.78);border:1px solid rgba(201,168,76,0.35);color:#C9A84C;width:48px;height:48px;border-radius:2px;font-size:1.1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(8px);transition:background 0.2s,border-color 0.2s;">&#8594;</button>
+
+      <!-- Dots -->
+      <div id="sDots" style="position:absolute;bottom:16px;left:50%;transform:translateX(-50%);display:flex;gap:8px;">
+        <span class="sdot active" data-i="0" style="width:7px;height:7px;border-radius:50%;background:#C9A84C;cursor:pointer;transition:transform 0.2s,opacity 0.2s;"></span>
+        <span class="sdot" data-i="1" style="width:7px;height:7px;border-radius:50%;background:rgba(201,168,76,0.3);border:1px solid rgba(201,168,76,0.4);cursor:pointer;transition:transform 0.2s,opacity 0.2s;"></span>
+        <span class="sdot" data-i="2" style="width:7px;height:7px;border-radius:50%;background:rgba(201,168,76,0.3);border:1px solid rgba(201,168,76,0.4);cursor:pointer;transition:transform 0.2s,opacity 0.2s;"></span>
+        <span class="sdot" data-i="3" style="width:7px;height:7px;border-radius:50%;background:rgba(201,168,76,0.3);border:1px solid rgba(201,168,76,0.4);cursor:pointer;transition:transform 0.2s,opacity 0.2s;"></span>
+        <span class="sdot" data-i="4" style="width:7px;height:7px;border-radius:50%;background:rgba(201,168,76,0.3);border:1px solid rgba(201,168,76,0.4);cursor:pointer;transition:transform 0.2s,opacity 0.2s;"></span>
+        <span class="sdot" data-i="5" style="width:7px;height:7px;border-radius:50%;background:rgba(201,168,76,0.3);border:1px solid rgba(201,168,76,0.4);cursor:pointer;transition:transform 0.2s,opacity 0.2s;"></span>
+      </div>
+
+      <!-- Slide counter -->
+      <div style="position:absolute;top:16px;right:20px;font-family:'DM Mono',monospace;font-size:0.65rem;letter-spacing:0.12em;color:rgba(201,168,76,0.6);background:rgba(7,8,9,0.6);padding:4px 10px;border-radius:2px;" id="sCounter">01 / 06</div>
+    </div>
+  </div>
+</section>
+
+<script>
+(function(){
+  var track = document.getElementById('sliderTrack');
+  var dots  = document.querySelectorAll('.sdot');
+  var counter = document.getElementById('sCounter');
+  var total = 6, cur = 0, timer;
+
+  function pad(n){ return (n < 10 ? '0' : '') + n; }
+
+  function goTo(n){
+    cur = ((n % total) + total) % total;
+    track.style.transform = 'translateX(-' + cur * 100 + '%)';
+    dots.forEach(function(d, i){
+      d.style.background = i === cur ? '#C9A84C' : 'rgba(201,168,76,0.3)';
+      d.style.transform  = i === cur ? 'scale(1.4)' : 'scale(1)';
+    });
+    counter.textContent = pad(cur + 1) + ' / ' + pad(total);
+  }
+
+  function startAuto(){ timer = setInterval(function(){ goTo(cur + 1); }, 4500); }
+  function stopAuto(){  clearInterval(timer); }
+
+  document.getElementById('sNext').addEventListener('click', function(){ stopAuto(); goTo(cur+1); startAuto(); });
+  document.getElementById('sPrev').addEventListener('click', function(){ stopAuto(); goTo(cur-1); startAuto(); });
+  dots.forEach(function(d){ d.addEventListener('click', function(){ stopAuto(); goTo(+d.dataset.i); startAuto(); }); });
+
+  track.addEventListener('mouseenter', stopAuto);
+  track.addEventListener('mouseleave', startAuto);
+
+  var tx = 0;
+  track.addEventListener('touchstart', function(e){ tx = e.touches[0].clientX; stopAuto(); }, { passive: true });
+  track.addEventListener('touchend',   function(e){
+    var diff = tx - e.changedTouches[0].clientX;
+    if(Math.abs(diff) > 40) diff > 0 ? goTo(cur+1) : goTo(cur-1);
+    startAuto();
+  });
+
+  startAuto();
+})();
+</script>
+
+<!-- WHY DECA -->
+<section class="why-section">
+  <div class="why-inner">
+    <div class="why-header">
+      <div class="reveal">
+        <div class="mono-label">Why Join</div>
+        <h2 class="section-hed">What You<br>Gain Here</h2>
+      </div>
+      <a href="news.html" class="btn btn-outline reveal reveal-delay-2">How to Apply →</a>
+    </div>
+    <div class="why-grid">
+      <div class="why-card reveal">
+        <div class="why-num">01 — Competition</div>
+        <h3>World-Class Competition</h3>
+        <p>Compete at Regionals, Provincials, and the International Career Development Conference. Represent Canada against the best student business minds on the planet.</p>
+      </div>
+      <div class="why-card reveal reveal-delay-2">
+        <div class="why-num">02 — Skills</div>
+        <h3>Real Business Skills</h3>
+        <p>Develop expertise across marketing, finance, entrepreneurship, and management. The same frameworks used in boardrooms and consulting firms.</p>
+      </div>
+      <div class="why-card reveal reveal-delay-3">
+        <div class="why-num">03 — Leadership</div>
+        <h3>Leadership at Scale</h3>
+        <p>Join an exec team with VP roles spanning education, media, branding, outreach, and technology. Build a résumé that stands out to every university and employer.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <h2 class="reveal">Ready to Compete?</h2>
+  <p class="reveal reveal-delay-1">Applications for 2025–2026 are open. Register for the Entrance Exam now.</p>
+  <div class="cta-btns reveal reveal-delay-2">
+    <a href="https://forms.gle/uGT5vVqKD2Srmwhg9" target="_blank" class="btn btn-gold">Register for Entrance Exam ↗</a>
+    <a href="executive.html" class="btn btn-outline">Meet the Team</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand"><svg viewBox="0 0 680 680" xmlns="http://www.w3.org/2000/svg" style="height:72px;width:auto;display:block;margin-bottom:14px;"><rect width="680" height="680" fill="#070809"/><g opacity="0.04" stroke="#C9A84C" stroke-width="0.5"><line x1="0" y1="85" x2="680" y2="85"/><line x1="0" y1="170" x2="680" y2="170"/><line x1="0" y1="255" x2="680" y2="255"/><line x1="0" y1="340" x2="680" y2="340"/><line x1="0" y1="425" x2="680" y2="425"/><line x1="0" y1="510" x2="680" y2="510"/><line x1="85" y1="0" x2="85" y2="680"/><line x1="170" y1="0" x2="170" y2="680"/><line x1="340" y1="0" x2="340" y2="680"/><line x1="510" y1="0" x2="510" y2="680"/></g><line x1="48" y1="48" x2="632" y2="48" stroke="#C9A84C" stroke-width="0.6" opacity="0.35"/><line x1="48" y1="632" x2="632" y2="632" stroke="#C9A84C" stroke-width="0.6" opacity="0.35"/><g stroke="#C9A84C" stroke-width="1.2" fill="none" opacity="0.55"><polyline points="48,70 48,48 70,48"/><polyline points="610,48 632,48 632,70"/><polyline points="48,610 48,632 70,632"/><polyline points="610,632 632,632 632,610"/></g><g transform="translate(340,355) rotate(-40)"><polygon points="-10,195 -38,250 -5,228 -25,285 10,240 26,295 18,240 48,260 16,205" fill="#C9A84C"/><polygon points="-8,195 -20,232 -2,218 -14,260 8,226" fill="#E8C96A" opacity="0.85"/><polygon points="-28,170 28,170 20,195 -20,195" fill="#12171f" stroke="#C9A84C" stroke-width="1"/><polygon points="-58,35 -18,-125 0,-150 0,170 -58,170" fill="#0d1117"/><polygon points="-58,35 -18,-125 0,-150 0,-28 -30,35" fill="#111d2e"/><polygon points="58,35 18,-125 0,-150 0,170 58,170" fill="#111d2e"/><polygon points="58,35 18,-125 0,-150 0,-28 30,35" fill="#162030"/><polygon points="-4,-150 4,-150 4,170 -4,170" fill="#C9A84C" opacity="0.55"/><line x1="-58" y1="35" x2="-18" y2="-125" stroke="#C9A84C" stroke-width="1.2" opacity="0.9"/><line x1="58" y1="35" x2="18" y2="-125" stroke="#C9A84C" stroke-width="1.2" opacity="0.9"/><polygon points="0,-250 -18,-150 0,-150 18,-150" fill="#0d1117"/><line x1="0" y1="-250" x2="-18" y2="-150" stroke="#C9A84C" stroke-width="1.4" opacity="0.95"/><line x1="0" y1="-250" x2="18" y2="-150" stroke="#C9A84C" stroke-width="1.4" opacity="0.95"/><circle cx="0" cy="-250" r="4" fill="#E8C96A"/><ellipse cx="0" cy="-52" rx="38" ry="44" fill="#070809" stroke="#C9A84C" stroke-width="1.4"/><ellipse cx="0" cy="-84" rx="20" ry="5" fill="#C9A84C" opacity="0.95"/><polygon points="0,-108 -15,-84 15,-84" fill="#111d2e"/><line x1="0" y1="-108" x2="-15" y2="-84" stroke="#C9A84C" stroke-width="1.1" opacity="0.8"/><line x1="0" y1="-108" x2="15" y2="-84" stroke="#C9A84C" stroke-width="1.1" opacity="0.8"/><circle cx="0" cy="-108" r="2.5" fill="#E8C96A"/><ellipse cx="0" cy="-60" rx="16" ry="17" fill="#1a1208"/><ellipse cx="-6" cy="-65" rx="4" ry="3.5" fill="#C9A84C"/><ellipse cx="6" cy="-65" rx="4" ry="3.5" fill="#C9A84C"/><circle cx="-6" cy="-65" r="1.8" fill="#070809"/><circle cx="6" cy="-65" r="1.8" fill="#070809"/><path d="M-9,-52 Q-5,-44 0,-42 Q5,-44 9,-52" fill="none" stroke="#E8C96A" stroke-width="1.6" opacity="0.85"/><polygon points="-58,35 -110,120 -110,170 -58,170" fill="#0d1117"/><line x1="-58" y1="35" x2="-110" y2="120" stroke="#C9A84C" stroke-width="1.1" opacity="0.85"/><polygon points="58,35 110,120 110,170 58,170" fill="#111d2e"/><line x1="58" y1="35" x2="110" y2="120" stroke="#C9A84C" stroke-width="1.1" opacity="0.85"/></g><text x="340" y="92" text-anchor="middle" font-family="DM Mono,monospace" font-size="12" fill="#C9A84C" opacity="0.65" letter-spacing="7">TURNER FENTON</text><text x="340" y="620" text-anchor="middle" font-family="Playfair Display,Georgia,serif" font-size="72" font-weight="900" fill="#E8C96A" letter-spacing="10">DECA</text><text x="340" y="644" text-anchor="middle" font-family="DM Mono,monospace" font-size="11" fill="#8A6A1F" letter-spacing="6">25 — 26</text></svg>
+        
+        <p>Turner Fenton DECA — one of Ontario's most accomplished student business chapters since 2013.</p>
+      </div>
+      <div>
+        <h5>Navigation</h5>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="sponsors.html">Sponsors</a></li>
+          <li><a href="executive.html">Executive</a></li>
+          <li><a href="news.html">News & Updates</a></li>
+          <li><a href="dashboard.html">Member Dashboard</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5>Contact</h5>
+        <ul>
+          <li><a href="mailto:tfssdeca@gmail.com">tfssdeca@gmail.com</a></li>
+          <li style="color:var(--muted2);font-size:0.84rem;line-height:1.8;margin-top:4px;">7935 Kennedy Rd S<br>Brampton, ON</li>
+        </ul>
+      </div>
+      <div>
+        <h5>Follow</h5>
+        <div class="footer-social">
+          <a href="https://www.instagram.com/tfssdeca/" target="_blank" aria-label="Instagram">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+          </a>
+          <a href="https://www.facebook.com/TFSSDECA/" target="_blank" aria-label="Facebook">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+          </a>
+          <a href="https://x.com/tfssdeca" target="_blank" aria-label="X">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 Turner Fenton DECA. All rights reserved.</span>
+      <span>Turner Fenton Secondary School · Brampton, ON</span>
+    </div>
+  </div>
+</footer>
+
+
+<script>
+(function() {
+  const track = document.getElementById('sliderTrack');
+  const dots = document.querySelectorAll('.dot');
+  const total = dots.length;
+  let current = 0;
+  let timer;
+
+  function goTo(n) {
+    current = ((n % total) + total) % total;
+    track.style.transform = 'translateX(-' + current * 100 + '%)';
+    dots.forEach((d, i) => d.classList.toggle('active', i === current));
+  }
+
+  function next() { goTo(current + 1); }
+  function prev() { goTo(current - 1); }
+
+  function startAuto() { timer = setInterval(next, 4000); }
+  function stopAuto()  { clearInterval(timer); }
+
+  document.getElementById('sliderNext').addEventListener('click', () => { stopAuto(); next(); startAuto(); });
+  document.getElementById('sliderPrev').addEventListener('click', () => { stopAuto(); prev(); startAuto(); });
+  dots.forEach((d, i) => d.addEventListener('click', () => { stopAuto(); goTo(i); startAuto(); }));
+
+  track.addEventListener('mouseenter', stopAuto);
+  track.addEventListener('mouseleave', startAuto);
+
+  // Touch / swipe
+  let touchX = 0;
+  track.addEventListener('touchstart', e => { touchX = e.touches[0].clientX; stopAuto(); }, { passive: true });
+  track.addEventListener('touchend', e => {
+    const diff = touchX - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 40) diff > 0 ? next() : prev();
+    startAuto();
+  });
+
+  startAuto();
+})();
+</script>
+<script src="transitions.js"></script>
+<script>
+/* ── PARTICLE CANVAS ─────────────────────────────── */
+(function() {
+  const canvas = document.getElementById('hero-canvas');
+  const ctx = canvas.getContext('2d');
+  let W, H, particles = [], animId;
+  const COUNT = 110;
+
+  function resize() {
+    W = canvas.width = canvas.offsetWidth;
+    H = canvas.height = canvas.offsetHeight;
+  }
+
+  function randBetween(a, b) { return a + Math.random() * (b - a); }
+
+  function makeParticle() {
+    return {
+      x: Math.random() * W,
+      y: Math.random() * H,
+      r: randBetween(0.6, 2.2),
+      vx: randBetween(-0.18, 0.18),
+      vy: randBetween(-0.28, -0.06),
+      alpha: randBetween(0.1, 0.55),
+      life: 0,
+      maxLife: randBetween(260, 520)
+    };
+  }
+
+  function init() {
+    resize();
+    particles = Array.from({ length: COUNT }, makeParticle);
+    particles.forEach(p => { p.life = Math.random() * p.maxLife; });
+    if (animId) cancelAnimationFrame(animId);
+    loop();
+  }
+
+  function loop() {
+    ctx.clearRect(0, 0, W, H);
+    particles.forEach((p, i) => {
+      p.life++;
+      if (p.life > p.maxLife) { particles[i] = makeParticle(); return; }
+      const fade = p.life < 40 ? p.life / 40 : p.life > p.maxLife - 40 ? (p.maxLife - p.life) / 40 : 1;
+      ctx.save();
+      ctx.globalAlpha = p.alpha * fade;
+      ctx.fillStyle = '#C9A84C';
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+      p.x += p.vx;
+      p.y += p.vy;
+      if (p.x < -4) p.x = W + 4;
+      if (p.x > W + 4) p.x = -4;
+    });
+
+    /* Draw thin connecting lines between nearby particles */
+    for (let i = 0; i < particles.length; i++) {
+      for (let j = i + 1; j < particles.length; j++) {
+        const dx = particles[i].x - particles[j].x;
+        const dy = particles[i].y - particles[j].y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < 90) {
+          ctx.save();
+          ctx.globalAlpha = (1 - dist / 90) * 0.08;
+          ctx.strokeStyle = '#C9A84C';
+          ctx.lineWidth = 0.5;
+          ctx.beginPath();
+          ctx.moveTo(particles[i].x, particles[i].y);
+          ctx.lineTo(particles[j].x, particles[j].y);
+          ctx.stroke();
+          ctx.restore();
+        }
+      }
+    }
+    animId = requestAnimationFrame(loop);
+  }
+
+  window.addEventListener('resize', init);
+  init();
+})();
+
+/* ── COUNT-UP ─────────────────────────────────────── */
+const nums = document.querySelectorAll('.stat-num[data-target]');
+const cio = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (!entry.isIntersecting) return;
+    const el = entry.target;
+    const target = parseInt(el.dataset.target);
+    let cur = 0;
+    const step = Math.ceil(target / 60);
+    const flash = () => { el.style.color = 'var(--gold-hi)'; setTimeout(() => { el.style.color = ''; }, 300); };
+    const tick = setInterval(() => {
+      cur = Math.min(cur + step, target);
+      el.textContent = cur.toLocaleString();
+      if (cur >= target) { clearInterval(tick); flash(); }
+    }, 18);
+    cio.unobserve(el);
+  });
+}, { threshold: 0.5 });
+nums.forEach(n => cio.observe(n));
+</script>
+</body>
+</html>
