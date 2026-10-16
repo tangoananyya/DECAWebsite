@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SoleSync</title>
+<style>
+  :root {
+    --bg: #0A2E38;
+    --bg-deep: #071F26;
+    --seafoam: #02C39A;
+    --seafoam-dim: #02C39A66;
+    --coral: #F96167;
+    --coral-dim: #F9616733;
+    --text: #FFFFFF;
+    --text-dim: #B9D3D3;
+    --glass: rgba(255, 255, 255, 0.06);
+    --glass-border: rgba(255, 255, 255, 0.12);
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    background: radial-gradient(circle at 20% 0%, #0E3F4C 0%, var(--bg) 45%, var(--bg-deep) 100%);
+    color: var(--text);
+    font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ---------- Top Bar ---------- */
+  header.topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 32px;
+    border-bottom: 1px solid var(--glass-border);
+    background: rgba(10, 46, 56, 0.55);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .brand-mark {
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, var(--seafoam), #01A184);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 18px var(--seafoam-dim);
+    flex-shrink: 0;
+  }
+
+  .brand-mark svg { width: 20px; height: 20px; }
+
+  .brand-name {
+    font-size: 19px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+  }
+
+  .brand-sub {
+    font-size: 10.5px;
+    color: var(--text-dim);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-top: 1px;
+  }
+
+  .topbar-right {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+  }
+
+  .status-pill {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: var(--text-dim);
+    padding: 6px 12px;
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+    background: var(--glass);
+  }
+
+  .status-dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: #6B8A8A;
+    transition: background 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .status-dot.connected {
+    background: var(--seafoam);
+    box-shadow: 0 0 10px var(--seafoam);
+    animation: pulse-dot 2s infinite;
+  }
+
+  @keyframes pulse-dot {
+    0%, 100% { box-shadow: 0 0 6px var(--seafoam); }
+    50% { box-shadow: 0 0 14px var(--seafoam); }
+  }
+
+  button.btn {
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    padding: 10px 20px;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
+  }
+
+  button.btn:active { transform: scale(0.97); }
+  button.btn:disabled { opacity: 0.55; cursor: not-allowed; }
+
+  .btn-primary {
+    background: linear-gradient(135deg, var(--seafoam), #01A184);
+    color: #06201C;
+    box-shadow: 0 4px 18px rgba(2, 195, 154, 0.35);
+  }
+
+  .btn-primary:hover:not(:disabled) {
+    box-shadow: 0 6px 24px rgba(2, 195, 154, 0.5);
+  }
+
+  .btn-ghost {
+    background: var(--glass);
+    color: var(--text);
+    border: 1px solid var(--glass-border);
+  }
+
+  .btn-ghost:hover { background: rgba(255,255,255,0.1); }
+
+  /* ---------- Main ---------- */
+  main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 32px 24px 24px;
+  }
+
+  /* ---------- Connect Screen ---------- */
+  .connect-screen {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 22px;
+    padding: 60px 20px;
+    width: 100%;
+  }
+
+  .connect-logo {
+    width: 88px;
+    height: 88px;
+    border-radius: 24px;
+    background: linear-gradient(135deg, var(--seafoam), #01A184);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 40px var(--seafoam-dim);
+    margin-bottom: 6px;
+  }
+
+  .connect-logo svg { width: 48px; height: 48px; }
+
+  .connect-title {
+    font-size: 34px;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+  }
+
+  .connect-desc {
+    font-size: 15px;
+    color: var(--text-dim);
+    max-width: 420px;
+    line-height: 1.5;
+  }
+
+  .connect-btn {
+    margin-top: 12px;
+    font-size: 16px;
+    padding: 16px 38px;
+    border-radius: 14px;
+  }
+
+  .connect-error {
+    color: var(--coral);
+    font-size: 13px;
+    max-width: 420px;
+    min-height: 18px;
+  }
+
+  .unsupported-note {
+    font-size: 12px;
+    color: var(--text-dim);
+    max-width: 400px;
+    border: 1px solid var(--glass-border);
+    background: var(--glass);
+    border-radius: 10px;
+    padding: 10px 14px;
+  }
+
+  /* ---------- Dashboard ---------- */
+  .dashboard {
+    width: 100%;
+    max-width: 980px;
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+  }
+
+  .card-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+
+  .zone-card {
+    position: relative;
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    padding: 26px 28px;
+    overflow: hidden;
+    transition: box-shadow 0.4s ease, border-color 0.4s ease;
+  }
+
+  .zone-card.alert {
+    border-color: rgba(249, 97, 103, 0.6);
+    box-shadow: 0 0 0 1px rgba(249,97,103,0.3), 0 0 40px rgba(249, 97, 103, 0.35);
+    animation: glow-pulse 1.6s infinite;
+  }
+
+  @keyframes glow-pulse {
+    0%, 100% { box-shadow: 0 0 0 1px rgba(249,97,103,0.3), 0 0 24px rgba(249, 97, 103, 0.25); }
+    50% { box-shadow: 0 0 0 1px rgba(249,97,103,0.5), 0 0 48px rgba(249, 97, 103, 0.5); }
+  }
+
+  .zone-label {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--text-dim);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .zone-alert-tag {
+    font-size: 10px;
+    letter-spacing: 1px;
+    color: var(--coral);
+    background: var(--coral-dim);
+    border: 1px solid rgba(249,97,103,0.5);
+    padding: 3px 8px;
+    border-radius: 6px;
+    opacity: 0;
+    transition: opacity 0.25s ease;
+  }
+
+  .zone-card.alert .zone-alert-tag { opacity: 1; }
+
+  .zone-temp {
+    font-size: 56px;
+    font-weight: 800;
+    margin-top: 8px;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .zone-temp .unit {
+    font-size: 22px;
+    font-weight: 500;
+    color: var(--text-dim);
+    margin-left: 4px;
+  }
+
+  .zone-sub {
+    margin-top: 10px;
+    font-size: 12.5px;
+    color: var(--text-dim);
+  }
+
+  /* ---------- Pressure Bar ---------- */
+  .pressure-card {
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    padding: 22px 28px 26px;
+  }
+
+  .pressure-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 12px;
+  }
+
+  .pressure-head .label {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--text-dim);
+  }
+
+  .pressure-head .value {
+    font-size: 15px;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .pressure-track {
+    width: 100%;
+    height: 16px;
+    border-radius: 8px;
+    background: rgba(255,255,255,0.08);
+    overflow: hidden;
+    border: 1px solid var(--glass-border);
+  }
+
+  .pressure-fill {
+    height: 100%;
+    width: 0%;
+    border-radius: 8px;
+    background: linear-gradient(90deg, #01A184, var(--seafoam));
+    transition: width 0.35s ease, background 0.35s ease;
+  }
+
+  .pressure-fill.high {
+    background: linear-gradient(90deg, #C4453E, var(--coral));
+  }
+
+  /* ---------- Chart ---------- */
+  .chart-card {
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    padding: 22px 24px 16px;
+  }
+
+  .chart-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
+  }
+
+  .chart-head .label {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--text-dim);
+  }
+
+  .legend {
+    display: flex;
+    gap: 16px;
+    font-size: 12px;
+    color: var(--text-dim);
+  }
+
+  .legend span { display: flex; align-items: center; gap: 6px; }
+
+  .swatch { width: 10px; height: 10px; border-radius: 3px; }
+  .swatch.heel { background: var(--seafoam); }
+  .swatch.fore { background: var(--coral); }
+
+  canvas#chart {
+    width: 100%;
+    height: 220px;
+    display: block;
+  }
+
+  /* ---------- Alert Banner ---------- */
+  .alert-banner {
+    position: fixed;
+    top: 0;
+    left: 50%;
+    transform: translate(-50%, -110%);
+    width: min(92%, 620px);
+    background: linear-gradient(135deg, #F96167, #D6444A);
+    color: #fff;
+    padding: 16px 22px;
+    margin-top: 14px;
+    border-radius: 14px;
+    box-shadow: 0 10px 34px rgba(249, 97, 103, 0.45);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    z-index: 100;
+    transition: transform 0.4s cubic-bezier(.34,1.4,.64,1);
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  .alert-banner.show { transform: translate(-50%, 0); }
+
+  .alert-banner .dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: #fff; flex-shrink: 0;
+    animation: pulse-dot 1.2s infinite;
+  }
+
+  /* ---------- Status Bar ---------- */
+  footer.statusbar {
+    display: flex;
+    justify-content: center;
+    gap: 36px;
+    flex-wrap: wrap;
+    padding: 14px 24px;
+    border-top: 1px solid var(--glass-border);
+    background: rgba(7, 31, 38, 0.6);
+    backdrop-filter: blur(10px);
+    font-size: 12.5px;
+    color: var(--text-dim);
+  }
+
+  footer.statusbar .item { display: flex; align-items: center; gap: 8px; }
+
+  footer.statusbar .item b { color: var(--text); font-weight: 600; }
+
+  .foot-dot {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: #6B8A8A;
+  }
+  .foot-dot.connected { background: var(--seafoam); box-shadow: 0 0 8px var(--seafoam); }
+
+  [hidden] { display: none !important; }
+
+  @media (max-width: 640px) {
+    .card-row { grid-template-columns: 1fr; }
+    header.topbar { padding: 14px 16px; }
+    .brand-name { font-size: 16px; }
+    footer.statusbar { gap: 18px; justify-content: flex-start; }
+  }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <div class="brand-mark">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M12 2L4 6v6c0 5 3.5 8.5 8 10 4.5-1.5 8-5 8-10V6l-8-4z" stroke="#06201C" stroke-width="2" stroke-linejoin="round" fill="none"/><path d="M9 12l2 2 4-4" stroke="#06201C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <div>
+      <div class="brand-name">SoleSync</div>
+      <div class="brand-sub">Gait &amp; Load Monitoring</div>
+    </div>
+  </div>
+  <div class="topbar-right">
+    <div class="status-pill">
+      <span class="status-dot" id="topStatusDot"></span>
+      <span id="topStatusText">Disconnected</span>
+    </div>
+    <button class="btn btn-primary" id="topConnectBtn">Connect</button>
+  </div>
+</header>
+
+<main>
+
+  <!-- Connect Screen -->
+  <section class="connect-screen" id="connectScreen">
+    <div class="connect-logo">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M12 2L4 6v6c0 5 3.5 8.5 8 10 4.5-1.5 8-5 8-10V6l-8-4z" stroke="#06201C" stroke-width="1.8" stroke-linejoin="round" fill="none"/><path d="M9 12l2 2 4-4" stroke="#06201C" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <div class="connect-title">SoleSync</div>
+    <div class="connect-desc">Real-time insole temperature and pressure monitoring for diabetic foot ulcer prevention.</div>
+    <button class="btn btn-primary connect-btn" id="mainConnectBtn">Connect to SoleSync</button>
+    <div class="connect-error" id="connectError"></div>
+    <div class="unsupported-note" id="unsupportedNote" hidden>
+      Web Bluetooth is not available in this browser. Please open SoleSync in Google Chrome or Microsoft Edge on desktop or Android.
+    </div>
+  </section>
+
+  <!-- Dashboard -->
+  <section class="dashboard" id="dashboard" hidden>
+
+    <div class="card-row">
+      <div class="zone-card" id="heelCard">
+        <div class="zone-label">
+          <span>Heel Zone</span>
+          <span class="zone-alert-tag">TEMP ALERT</span>
+        </div>
+        <div class="zone-temp"><span id="heelTemp">--</span><span class="unit">&deg;C</span></div>
+        <div class="zone-sub">Plantar heel sensor &middot; T1</div>
+      </div>
+
+      <div class="zone-card" id="foreCard">
+        <div class="zone-label">
+          <span>Forefoot Zone</span>
+          <span class="zone-alert-tag">TEMP ALERT</span>
+        </div>
+        <div class="zone-temp"><span id="foreTemp">--</span><span class="unit">&deg;C</span></div>
+        <div class="zone-sub">Plantar forefoot sensor &middot; T2</div>
+      </div>
+    </div>
+
+    <div class="pressure-card">
+      <div class="pressure-head">
+        <span class="label">Heel Pressure</span>
+        <span class="value" id="pressureValue">--</span>
+      </div>
+      <div class="pressure-track">
+        <div class="pressure-fill" id="pressureFill"></div>
+      </div>
+    </div>
+
+    <div class="chart-card">
+      <div class="chart-head">
+        <span class="label">Temperature Trend</span>
+        <div class="legend">
+          <span><span class="swatch heel"></span>Heel</span>
+          <span><span class="swatch fore"></span>Forefoot</span>
+        </div>
+      </div>
+      <canvas id="chart"></canvas>
+    </div>
+
+  </section>
+
+</main>
+
+<div class="alert-banner" id="alertBanner">
+  <span class="dot"></span>
+  <span id="alertBannerText">Alert</span>
+</div>
+
+<footer class="statusbar">
+  <div class="item"><span class="foot-dot" id="footDot"></span><span id="footConn">Disconnected</span></div>
+  <div class="item">Last sync: <b id="footSync">--</b></div>
+  <div class="item">Sampling rate: <b id="footRate">-- Hz</b></div>
+</footer>
+
+<script>
+(() => {
+  'use strict';
+
+  const SERVICE_UUID = '4fafc201-1fb5-459e-8fcc-c5c9c331914b';
+  const CHAR_UUID = 'beb5483e-36e1-4688-b7f5-ea07361b26a8';
+  const DEVICE_NAME = 'SoleSync';
+  const HISTORY_LEN = 60;
+
+  const el = (id) => document.getElementById(id);
+
+  const topStatusDot = el('topStatusDot');
+  const topStatusText = el('topStatusText');
+  const topConnectBtn = el('topConnectBtn');
+  const mainConnectBtn = el('mainConnectBtn');
+  const connectScreen = el('connectScreen');
+  const connectError = el('connectError');
+  const unsupportedNote = el('unsupportedNote');
+  const dashboard = el('dashboard');
+
+  const heelCard = el('heelCard');
+  const foreCard = el('foreCard');
+  const heelTemp = el('heelTemp');
+  const foreTemp = el('foreTemp');
+
+  const pressureValue = el('pressureValue');
+  const pressureFill = el('pressureFill');
+
+  const alertBanner = el('alertBanner');
+  const alertBannerText = el('alertBannerText');
+
+  const footDot = el('footDot');
+  const footConn = el('footConn');
+  const footSync = el('footSync');
+  const footRate = el('footRate');
+
+  const canvas = el('chart');
+  const ctx = canvas.getContext('2d');
+
+  let device = null;
+  let server = null;
+  let characteristic = null;
+  let connected = false;
+
+  let heelHistory = [];
+  let foreHistory = [];
+
+  let alertTimer = null;
+  let lastSampleTime = null;
+  let sampleIntervals = [];
+
+  const bleSupported = 'bluetooth' in navigator;
+
+  function setConnectedUI(isConnected) {
+    connected = isConnected;
+    topStatusDot.classList.toggle('connected', isConnected);
+    footDot.classList.toggle('connected', isConnected);
+    topStatusText.textContent = isConnected ? 'Connected' : 'Disconnected';
+    footConn.textContent = isConnected ? 'BLE Connected' : 'BLE Disconnected';
+    topConnectBtn.textContent = isConnected ? 'Disconnect' : 'Connect';
+    connectScreen.hidden = isConnected;
+    dashboard.hidden = !isConnected;
+
+    if (!isConnected) {
+      footRate.textContent = '-- Hz';
+      footSync.textContent = '--';
+      heelTemp.textContent = '--';
+      foreTemp.textContent = '--';
+      pressureValue.textContent = '--';
+      pressureFill.style.width = '0%';
+      heelHistory = [];
+      foreHistory = [];
+      drawChart();
+    }
+  }
+
+  function showError(msg) {
+    connectError.textContent = msg;
+  }
+
+  async function connectBLE() {
+    if (!bleSupported) {
+      unsupportedNote.hidden = false;
+      return;
+    }
+    showError('');
+    topConnectBtn.disabled = true;
+    mainConnectBtn.disabled = true;
+    try {
+      device = await navigator.bluetooth.requestDevice({
+        filters: [{ name: DEVICE_NAME, services: [SERVICE_UUID] }],
+        optionalServices: [SERVICE_UUID]
+      });
+
+      device.addEventListener('gattserverdisconnected', onDisconnected);
+
+      server = await device.gatt.connect();
+      const service = await server.getPrimaryService(SERVICE_UUID);
+      characteristic = await service.getCharacteristic(CHAR_UUID);
+
+      await characteristic.startNotifications();
+      characteristic.addEventListener('characteristicvaluechanged', onData);
+
+      setConnectedUI(true);
+    } catch (err) {
+      console.error(err);
+      showError(err.message || 'Failed to connect. Ensure the device is powered on and in range.');
+      setConnectedUI(false);
+    } finally {
+      topConnectBtn.disabled = false;
+      mainConnectBtn.disabled = false;
+    }
+  }
+
+  async function disconnectBLE() {
+    if (device && device.gatt.connected) {
+      device.gatt.disconnect();
+    } else {
+      onDisconnected();
+    }
+  }
+
+  function onDisconnected() {
+    setConnectedUI(false);
+    characteristic = null;
+    server = null;
+  }
+
+  function parsePayload(str) {
+    const out = {};
+    str.split(',').forEach(pair => {
+      const [rawKey, rawVal] = pair.split(':');
+      if (rawKey === undefined || rawVal === undefined) return;
+      out[rawKey.trim()] = parseFloat(rawVal.trim());
+    });
+    return out;
+  }
+
+  function onData(event) {
+    const value = event.target.value;
+    const decoder = new TextDecoder('utf-8');
+    const str = decoder.decode(value);
+    const data = parsePayload(str);
+    if (data.T1 === undefined || data.T2 === undefined) return;
+
+    updateSamplingRate();
+    updateReadout(data);
+  }
+
+  function updateSamplingRate() {
+    const now = performance.now();
+    if (lastSampleTime !== null) {
+      const delta = now - lastSampleTime;
+      if (delta > 0) {
+        sampleIntervals.push(delta);
+        if (sampleIntervals.length > 10) sampleIntervals.shift();
+        const avg = sampleIntervals.reduce((a, b) => a + b, 0) / sampleIntervals.length;
+        const hz = 1000 / avg;
+        footRate.textContent = hz >= 10 ? `${hz.toFixed(0)} Hz` : `${hz.toFixed(1)} Hz`;
+      }
+    }
+    lastSampleTime = now;
+  }
+
+  function updateReadout(data) {
+    const t1 = data.T1;
+    const t2 = data.T2;
+    const p = data.P !== undefined ? data.P : 0;
+    const tAlert = data.TALERT === 1;
+    const pAlert = data.PALERT === 1;
+
+    heelTemp.textContent = t1.toFixed(1);
+    foreTemp.textContent = t2.toFixed(1);
+    pressureValue.textContent = `${Math.round(p)} / 4095`;
+
+    const pct = Math.max(0, Math.min(100, (p / 4095) * 100));
+    pressureFill.style.width = pct + '%';
+    pressureFill.classList.toggle('high', p > 3000);
+
+    heelCard.classList.toggle('alert', tAlert);
+    foreCard.classList.toggle('alert', tAlert);
+
+    heelHistory.push(t1);
+    foreHistory.push(t2);
+    if (heelHistory.length > HISTORY_LEN) heelHistory.shift();
+    if (foreHistory.length > HISTORY_LEN) foreHistory.shift();
+
+    if (tAlert || pAlert) {
+      let msg;
+      if (tAlert && pAlert) msg = 'Temperature and pressure thresholds exceeded';
+      else if (tAlert) msg = 'Temperature threshold exceeded';
+      else msg = 'Pressure threshold exceeded';
+      showAlertBanner(msg);
+    }
+
+    const now = new Date();
+    footSync.textContent = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+  }
+
+  function showAlertBanner(msg) {
+    alertBannerText.textContent = msg;
+    alertBanner.classList.add('show');
+    if (alertTimer) clearTimeout(alertTimer);
+    alertTimer = setTimeout(() => {
+      alertBanner.classList.remove('show');
+    }, 5000);
+  }
+
+  function resizeCanvas() {
+    const rect = canvas.getBoundingClientRect();
+    const dpr = window.devicePixelRatio || 1;
+    canvas.width = rect.width * dpr;
+    canvas.height = 220 * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+
+  function drawChart() {
+    const rect = canvas.getBoundingClientRect();
+    const w = rect.width;
+    const h = 220;
+    ctx.clearRect(0, 0, w, h);
+
+    const padding = { top: 14, right: 14, bottom: 22, left: 40 };
+    const plotW = w - padding.left - padding.right;
+    const plotH = h - padding.top - padding.bottom;
+
+    const allVals = heelHistory.concat(foreHistory);
+    let minV = allVals.length ? Math.min(...allVals) : 25;
+    let maxV = allVals.length ? Math.max(...allVals) : 40;
+    if (maxV - minV < 4) {
+      const mid = (maxV + minV) / 2;
+      minV = mid - 2;
+      maxV = mid + 2;
+    }
+    minV -= 1;
+    maxV += 1;
+
+    ctx.strokeStyle = 'rgba(255,255,255,0.08)';
+    ctx.lineWidth = 1;
+    ctx.fillStyle = 'rgba(185,211,211,0.55)';
+    ctx.font = '10px Segoe UI, sans-serif';
+    ctx.textAlign = 'right';
+    ctx.textBaseline = 'middle';
+
+    const gridLines = 4;
+    for (let i = 0; i <= gridLines; i++) {
+      const y = padding.top + (plotH / gridLines) * i;
+      ctx.beginPath();
+      ctx.moveTo(padding.left, y);
+      ctx.lineTo(w - padding.right, y);
+      ctx.stroke();
+      const val = maxV - ((maxV - minV) / gridLines) * i;
+      ctx.fillText(val.toFixed(0) + '°', padding.left - 8, y);
+    }
+
+    function plotLine(data, color) {
+      if (data.length < 2) return;
+      ctx.beginPath();
+      ctx.strokeStyle = color;
+      ctx.lineWidth = 2.2;
+      ctx.lineJoin = 'round';
+      ctx.lineCap = 'round';
+      const n = HISTORY_LEN;
+      const startIdx = n - data.length;
+      data.forEach((val, i) => {
+        const x = padding.left + ((startIdx + i) / (n - 1)) * plotW;
+        const y = padding.top + plotH - ((val - minV) / (maxV - minV)) * plotH;
+        if (i === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      });
+      ctx.stroke();
+
+      const lastVal = data[data.length - 1];
+      const lastX = padding.left + ((n - 1) / (n - 1)) * plotW;
+      const lastY = padding.top + plotH - ((lastVal - minV) / (maxV - minV)) * plotH;
+      ctx.beginPath();
+      ctx.fillStyle = color;
+      ctx.arc(lastX, lastY, 3, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    plotLine(heelHistory, '#02C39A');
+    plotLine(foreHistory, '#F96167');
+
+    if (heelHistory.length === 0) {
+      ctx.fillStyle = 'rgba(185,211,211,0.4)';
+      ctx.textAlign = 'center';
+      ctx.font = '13px Segoe UI, sans-serif';
+      ctx.fillText('Awaiting sensor data…', w / 2, h / 2);
+    }
+  }
+
+  window.addEventListener('resize', () => {
+    resizeCanvas();
+    drawChart();
+  });
+
+  setInterval(() => {
+    if (connected) drawChart();
+  }, 500);
+
+  topConnectBtn.addEventListener('click', () => {
+    if (connected) {
+      disconnectBLE();
+    } else {
+      connectBLE();
+    }
+  });
+
+  mainConnectBtn.addEventListener('click', connectBLE);
+
+  if (!bleSupported) {
+    unsupportedNote.hidden = false;
+  }
+
+  resizeCanvas();
+  drawChart();
+})();
+</script>
+
+</body>
+</html>
